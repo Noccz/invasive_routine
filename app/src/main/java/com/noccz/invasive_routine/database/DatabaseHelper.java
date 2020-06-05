@@ -4,27 +4,26 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.noccz.invasive_routine.database.DatabaseConstants.DATABASE_NAME;
+import static com.noccz.invasive_routine.database.DatabaseConstants.TABLE_NAME;
+import static com.noccz.invasive_routine.database.DatabaseConstants.TASK_CONTENT;
+import static com.noccz.invasive_routine.database.DatabaseConstants.TASK_ID;
+import static com.noccz.invasive_routine.database.DatabaseConstants.TASK_IS_COMPLETED;
+import static com.noccz.invasive_routine.database.DatabaseConstants.TASK_TIME;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
-    // Table Name
-    public static final String TABLE_NAME = "routines";
-
-    // Table columns
-    public static final String _ID = "_id";
-    public static final String SUBJECT = "subject";
-    public static final String DESC = "description";
-
-    // Database Information
-    static final String DB_NAME = "JOURNALDEV_COUNTRIES.DB";
-
-    // database version
-    static final int DB_VERSION = 1;
+    private static int DATABASE_VERSION = 1;
 
     // Creating table query
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SUBJECT + " TEXT NOT NULL, " + DESC + " TEXT);";
-    private static final String CREATE_TABLE1 = "create table routines(_id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT NOT NULL, descriptionTEXT);";
+    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" +
+            TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            TASK_CONTENT + " TEXT, " +
+            TASK_TIME + " TEXT NOT NULL, " +
+            TASK_IS_COMPLETED + " INTEGER NOT NULL" +
+            ");";
 
     DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -35,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.setVersion(newVersion);
         onCreate(db);
     }
 }
