@@ -68,12 +68,12 @@ public class TaskItem {
             return this;
         }
         
-        public Builder withCompleted(boolean isCompleted) {
-            this.isCompleted = isCompleted;
+        public Builder withIsCompleted(int isCompleted) {
+            this.isCompleted = isCompleted == 1;
             return this;
         }
 
-        TaskItem build() {
+        public TaskItem build() {
             return new TaskItem(this);
         }
     }
