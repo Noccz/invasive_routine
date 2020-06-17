@@ -13,6 +13,7 @@ import com.noccz.invasive_routine.R;
 import com.noccz.invasive_routine.task.TaskItem;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.noccz.invasive_routine.Utils.getGsonParser;
@@ -28,6 +29,18 @@ public class RoutineViewAdapter extends RecyclerView.Adapter {
 
     public void addItem(TaskItem item) {
         taskItems.add(item);
+        taskItems.sort(new Comparator<TaskItem>() {
+            @Override
+            public int compare(TaskItem item1, TaskItem item2) {
+                if (item1.getHour() < item2.getHour()) {
+                    return -1;
+                } else if (item1.getHour() == item2.getHour()) {
+                    return Integer.compare(item1.getMinute(), item2.getMinute());
+                } else {
+                    return 1;
+                }
+            }
+        });
         notifyDataSetChanged();
     }
 
