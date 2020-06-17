@@ -45,16 +45,14 @@ public class RoutineView extends Fragment {
             }
         });
 
-        recyclerView = findViewById(container, R.id.taskRecyclerView);
-
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        return inflater.inflate(R.layout.routine_view_content, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         taskItems = new ArrayList<>();
-        recyclerView = findViewById(view, R.id.taskRecyclerView);
-        routineViewAdapter = new RoutineViewAdapter(taskItems);
+        recyclerView = findViewById(view, R.id.routine_view_content);
+        routineViewAdapter = new RoutineViewAdapter(taskItems, this);
         fetchDatabaseItems();
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getRootView().getContext()));
         recyclerView.setAdapter(routineViewAdapter);

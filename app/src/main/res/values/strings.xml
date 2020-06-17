@@ -10,4 +10,5 @@
     <string name="task_description">Task Description</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
 </resources>

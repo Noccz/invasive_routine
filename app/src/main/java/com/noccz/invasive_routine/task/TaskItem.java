@@ -21,6 +21,14 @@ public class TaskItem {
         return time;
     }
 
+    public int getHour() {
+        return Integer.parseInt(time.split(":")[0].trim());
+    }
+
+    public int getMinute() {
+        return Integer.parseInt(time.split(":")[1].trim());
+    }
+
     public String getContent() {
         return content;
     }
@@ -48,6 +56,7 @@ public class TaskItem {
         }
 
         private Builder(TaskItem original) {
+            id = original.id;
             time = original.time;
             content = original.content;
             isCompleted = original.isCompleted;

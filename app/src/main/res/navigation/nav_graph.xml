@@ -9,7 +9,7 @@
         android:id="@+id/RoutineView"
         android:name="com.noccz.invasive_routine.routine.RoutineView"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/routine_view_content">
         <action
             android:id="@+id/action_RoutineView_to_TaskManager"
             app:destination="@id/TaskEditor"
@@ -23,9 +23,9 @@
         android:id="@+id/TaskEditor"
         android:name="com.noccz.invasive_routine.task.TaskEditor"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/task_editor_content">
         <action
-            android:id="@+id/action_TaskManager_to_RoutineView2"
+            android:id="@+id/action_TaskManager_to_RoutineView"
             app:destination="@id/RoutineView"/>
     </fragment>
 </navigation>

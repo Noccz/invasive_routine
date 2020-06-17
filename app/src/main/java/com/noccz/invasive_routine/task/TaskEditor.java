@@ -18,20 +18,31 @@ import com.noccz.invasive_routine.R;
 import com.noccz.invasive_routine.database.DatabaseManager;
 
 import static com.noccz.invasive_routine.Utils.findViewById;
+import static com.noccz.invasive_routine.Utils.getGsonParser;
 
 public class TaskEditor extends Fragment {
+    private TaskItem taskItem;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        return inflater.inflate(R.layout.task_editor_content, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TimePicker timePicker = findViewById(view, R.id.task_time_picker);
         timePicker.setIs24HourView(true);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            taskItem = getGsonParser().fromJson(bundle.getString("taskItem"), TaskItem.class);
+            EditText description = findViewById(view, R.id.task_description_editor);
+            description.setText(taskItem.getContent());
+            timePicker.setHour(taskItem.getHour());
+            timePicker.setMinute(taskItem.getMinute());
+        }
         setupToolbar(view);
-        setupButtons(view);
+        setupButtons(view, bundle != null);
     }
 
     private void setupToolbar(View view) {
@@ -41,9 +52,12 @@ public class TaskEditor extends Fragment {
         toolbar.setNavigationOnClickListener(taskButtonOnClickListener());
     }
 
-    private void setupButtons(View view) {
-        Button createButton = findViewById(view, R.id.create_task_button);
-        createButton.setOnClickListener(taskButtonOnClickListener());
+    private void setupButtons(View view, boolean showUpdateButton) {
+        Button actionButton = showUpdateButton
+                ? (Button) findViewById(view, R.id.update_task_button)
+                : (Button) findViewById(view, R.id.create_task_button);
+        actionButton.setOnClickListener(taskButtonOnClickListener());
+        actionButton.setVisibility(View.VISIBLE);
 
         Button cancelButton = findViewById(view, R.id.cancel_task_button);
         cancelButton.setOnClickListener(taskButtonOnClickListener());
@@ -54,8 +68,13 @@ public class TaskEditor extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(view.getId() == R.id.create_task_button) {
-                    addTaskItem(view);
+                switch (view.getId()) {
+                    case R.id.create_task_button:
+                        addTaskItem(view);
+                        break;
+                    case R.id.update_task_button:
+                        updateTaskItem(view, taskItem);
+                        break;
                 }
                 NavHostFragment.findNavController(TaskEditor.this)
                         .popBackStack();
@@ -77,6 +96,21 @@ public class TaskEditor extends Fragment {
                 .withIsCompleted(0)
                 .build());
         dbManager.close();
+    }
+
+    private void updateTaskItem(View view, TaskItem item) { //TODO: Kolla om id är satt. Den behövs för att kunna uppdatera itemlist i routineview
+        if(item != null) {
+            EditText content = findViewById(view, R.id.task_description_editor);
+            TimePicker time = findViewById(view, R.id.task_time_picker);
+            DatabaseManager dbManager = new DatabaseManager(this.getContext());
+            dbManager.open();
+            dbManager.update(item.newBuilderWithCurrent()
+                    .withContent(content.getText().toString())
+                    .withTime(getSelectedTime(time))
+                    .withIsCompleted(0)
+                    .build());
+            dbManager.close();
+        }
     }
 
     private String getSelectedTime(TimePicker time) {
