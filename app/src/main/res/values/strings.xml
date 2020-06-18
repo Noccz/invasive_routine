@@ -11,4 +11,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="done">Set to Done</string>
+    <string name="undone">Set to Undone</string>
 </resources>
